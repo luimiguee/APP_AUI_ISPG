@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interface de login acessível e funcional">
+    <title>Login - Interface Acessível</title>
+    <style>
+        /* Reset e Variáveis CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-focus: #3b82f6;
+            --error-color: #dc2626;
+            --error-bg: #fef2f2;
+            --success-color: #16a34a;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #d1d5db;
+            --bg-color: #f9fafb;
+            --white: #ffffff;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        /* Preferência de movimento reduzido */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Container Principal */
+        .login-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cabeçalho */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Formulário */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Grupo de Campo */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* Label */
+        label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .required-indicator {
+            color: var(--error-color);
+            font-weight: 600;
+        }
+
+        /* Input */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--white);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-focus);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        input:focus-visible {
+            outline: 2px solid var(--primary-focus);
+            outline-offset: 2px;
+        }
+
+        input:invalid:not(:placeholder-shown) {
+            border-color: var(--error-color);
+        }
+
+        input:valid:not(:placeholder-shown) {
+            border-color: var(--success-color);
+        }
+
+        /* Mensagens de Erro */
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .error-message::before {
+            content: "⚠";
+            font-size: 1rem;
+        }
+
+        .error-message[aria-hidden="true"] {
+            display: none;
+        }
+
+        /* Mensagens de Ajuda */
+        .help-text {
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Checkbox - Lembrar-me */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        /* Botão */
+        .btn {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--primary-focus);
+            outline-offset: 2px;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Link */
+        .form-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .form-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .form-link a:hover {
+            text-decoration: underline;
+        }
+
+        .form-link a:focus-visible {
+            outline: 2px solid var(--primary-focus);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Mensagem de Sucesso/Erro Global */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9375rem;
+        }
+
+        .alert-error {
+            background-color: var(--error-bg);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .alert-success {
+            background-color: #f0fdf4;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .alert[role="alert"] {
+            display: none;
+        }
+
+        .alert[role="alert"]:not([aria-hidden="true"]) {
+            display: flex;
+        }
+
+        /* Indicador de Força de Senha */
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.8125rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background-color: var(--border-color);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .strength-weak {
+            background-color: var(--error-color);
+            width: 33%;
+        }
+
+        .strength-medium {
+            background-color: #f59e0b;
+            width: 66%;
+        }
+
+        .strength-strong {
+            background-color: var(--success-color);
+            width: 100%;
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Modo de Alto Contraste */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --text-primary: #000000;
+            }
+
+            input {
+                border-width: 3px;
+            }
+        }
+
+        /* Modo Escuro (opcional) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --text-primary: #f9fafb;
+                --text-secondary: #d1d5db;
+                --border-color: #374151;
+                --white: #1f2937;
+            }
+
+            body {
+                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="login-container" role="main">
+        <header class="login-header">
+            <h1>Iniciar Sessão</h1>
+            <p>Por favor, introduza as suas credenciais para continuar</p>
+        </header>
+
+        <!-- Mensagem de Alerta Global -->
+        <div id="global-alert" class="alert alert-error" role="alert" aria-live="polite" aria-atomic="true" aria-hidden="true"></div>
+
+        <form class="login-form" id="loginForm" novalidate aria-label="Formulário de login">
+            <!-- Campo Email -->
+            <div class="form-group">
+                <label for="email">
+                    Endereço de Email
+                    <span class="required-indicator" aria-label="obrigatório">*</span>
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    autocomplete="email"
+                    placeholder="exemplo@email.com"
+                    required
+                    aria-required="true"
+                    aria-invalid="false"
+                    aria-describedby="email-error email-help"
+                />
+                <span id="email-error" class="error-message" role="alert" aria-live="polite" aria-hidden="true"></span>
+                <span id="email-help" class="help-text">Introduza o seu endereço de email válido</span>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="form-group">
+                <label for="password">
+                    Palavra-passe
+                    <span class="required-indicator" aria-label="obrigatório">*</span>
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    autocomplete="current-password"
+                    placeholder="Introduza a sua palavra-passe"
+                    required
+                    aria-required="true"
+                    aria-invalid="false"
+                    aria-describedby="password-error password-strength"
+                    minlength="8"
+                />
+                <span id="password-error" class="error-message" role="alert" aria-live="polite" aria-hidden="true"></span>
+                <div id="password-strength" class="password-strength" aria-live="polite">
+                    <div class="strength-bar">
+                        <div class="strength-bar-fill" id="strength-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkbox Lembrar-me -->
+            <div class="checkbox-group">
+                <input
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                />
+                <label for="remember">Lembrar-me neste dispositivo</label>
+            </div>
+
+            <!-- Botão de Submissão -->
+            <button type="submit" class="btn" id="submitBtn">
+                Iniciar Sessão
+            </button>
+        </form>
+
+        <!-- Links Úteis -->
+        <div class="form-link">
+            <a href="#" id="forgot-password">Esqueceu-se da palavra-passe?</a>
+        </div>
+    </main>
+
+    <script>
+        // Referências aos elementos
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+        const globalAlert = document.getElementById('global-alert');
+        const submitBtn = document.getElementById('submitBtn');
+        const strengthBarFill = document.getElementById('strength-bar-fill');
+
+        // Validação em tempo real
+        emailInput.addEventListener('input', () => validateEmail());
+        emailInput.addEventListener('blur', () => validateEmail());
+        passwordInput.addEventListener('input', () => {
+            validatePassword();
+            checkPasswordStrength();
+        });
+        passwordInput.addEventListener('blur', () => validatePassword());
+
+        // Validação de Email
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!email) {
+                showError(emailInput, emailError, 'O endereço de email é obrigatório');
+                return false;
+            } else if (!emailRegex.test(email)) {
+                showError(emailInput, emailError, 'Por favor, introduza um endereço de email válido');
+                return false;
+            } else {
+                clearError(emailInput, emailError);
+                return true;
+            }
+        }
+
+        // Validação de Senha
+        function validatePassword() {
+            const password = passwordInput.value;
+
+            if (!password) {
+                showError(passwordInput, passwordError, 'A palavra-passe é obrigatória');
+                return false;
+            } else if (password.length < 8) {
+                showError(passwordInput, passwordError, 'A palavra-passe deve ter pelo menos 8 caracteres');
+                return false;
+            } else {
+                clearError(passwordInput, passwordError);
+                return true;
+            }
+        }
+
+        // Verificar Força da Senha
+        function checkPasswordStrength() {
+            const password = passwordInput.value;
+            let strength = 0;
+            let strengthClass = '';
+            let strengthText = '';
+
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+            if (strength <= 2) {
+                strengthClass = 'strength-weak';
+                strengthText = 'Fraca';
+            } else if (strength <= 3) {
+                strengthClass = 'strength-medium';
+                strengthText = 'Média';
+            } else {
+                strengthClass = 'strength-strong';
+                strengthText = 'Forte';
+            }
+
+            strengthBarFill.className = `strength-bar-fill ${strengthClass}`;
+            strengthBarFill.setAttribute('aria-label', `Força da senha: ${strengthText}`);
+        }
+
+        // Mostrar Erro
+        function showError(input, errorElement, message) {
+            input.setAttribute('aria-invalid', 'true');
+            errorElement.textContent = message;
+            errorElement.setAttribute('aria-hidden', 'false');
+            input.classList.add('error');
+        }
+
+        // Limpar Erro
+        function clearError(input, errorElement) {
+            input.setAttribute('aria-invalid', 'false');
+            errorElement.setAttribute('aria-hidden', 'true');
+            errorElement.textContent = '';
+            input.classList.remove('error');
+        }
+
+        // Mostrar Alerta Global
+        function showGlobalAlert(message, type = 'error') {
+            globalAlert.textContent = message;
+            globalAlert.className = `alert alert-${type}`;
+            globalAlert.setAttribute('aria-hidden', 'false');
+            
+            // Focar no alerta para leitores de tela
+            globalAlert.focus();
+            
+            // Ocultar após 5 segundos
+            setTimeout(() => {
+                globalAlert.setAttribute('aria-hidden', 'true');
+            }, 5000);
+        }
+
+        // Submissão do Formulário
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validar todos os campos
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (!isEmailValid || !isPasswordValid) {
+                showGlobalAlert('Por favor, corrija os erros no formulário antes de continuar.');
+                // Focar no primeiro campo com erro
+                if (!isEmailValid) {
+                    emailInput.focus();
+                } else if (!isPasswordValid) {
+                    passwordInput.focus();
+                }
+                return;
+            }
+
+            // Desabilitar botão durante submissão
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'A processar...';
+
+            // Simular submissão (substituir por chamada real à API)
+            try {
+                await simulateLogin(emailInput.value.trim(), passwordInput.value);
+                
+                showGlobalAlert('Login realizado com sucesso!', 'success');
+                
+                // Redirecionar após sucesso (exemplo)
+                setTimeout(() => {
+                    console.log('Redirecionando...');
+                    // window.location.href = '/dashboard';
+                }, 1500);
+            } catch (error) {
+                showGlobalAlert(error.message || 'Erro ao fazer login. Por favor, tente novamente.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Iniciar Sessão';
+            }
+        });
+
+        // Simular Login (substituir por chamada real à API)
+        function simulateLogin(email, password) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Simulação: aceitar qualquer email e senha com 8+ caracteres
+                    if (password.length >= 8) {
+                        resolve({ success: true });
+                    } else {
+                        reject(new Error('Credenciais inválidas'));
+                    }
+                }, 1500);
+            });
+        }
+
+        // Link "Esqueceu-se da palavra-passe"
+        document.getElementById('forgot-password').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Funcionalidade de recuperação de palavra-passe em desenvolvimento.');
+        });
+
+        // Navegação por teclado melhorada
+        form.addEventListener('keydown', (e) => {
+            // Enter no último campo submete o formulário
+            if (e.key === 'Enter' && e.target === passwordInput && !submitBtn.disabled) {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Prevenir submissão dupla
+        let isSubmitting = false;
+        form.addEventListener('submit', () => {
+            if (isSubmitting) {
+                e.preventDefault();
+                return;
+            }
+            isSubmitting = true;
+            setTimeout(() => {
+                isSubmitting = false;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
