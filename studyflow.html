@@ -14,20 +14,20 @@
         }
 
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --primary-light: #e0e7ff;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
             --secondary-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
-            --text-primary: #1f2937;
+            --text-primary: #111827;
             --text-secondary: #6b7280;
             --border-color: #e5e7eb;
-            --bg-color: #f9fafb;
+            --bg-color: #ffffff;
             --white: #ffffff;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --transition: all 0.2s ease-in-out;
+            --shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
         }
 
         /* Preferência de movimento reduzido */
@@ -41,7 +41,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-color);
+            background: #fafafa;
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
@@ -50,8 +50,8 @@
         /* Header */
         header {
             background: var(--white);
-            box-shadow: var(--shadow);
-            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -108,9 +108,9 @@
         /* Cards */
         .card {
             background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.75rem;
             margin-bottom: 1.5rem;
         }
 
@@ -120,7 +120,7 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .card-title {
@@ -217,7 +217,7 @@
         textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         textarea {
@@ -231,17 +231,16 @@
         }
 
         .item {
-            background: var(--bg-color);
-            border: 2px solid var(--border-color);
+            background: var(--white);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 1rem;
+            padding: 1.25rem;
             margin-bottom: 0.75rem;
             transition: var(--transition);
         }
 
         .item:hover {
             border-color: var(--primary-color);
-            box-shadow: var(--shadow);
         }
 
         .item-header {
@@ -323,11 +322,11 @@
             background: var(--white);
             border-radius: 12px;
             padding: 2rem;
-            max-width: 600px;
+            max-width: 560px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         .modal-header {
@@ -373,18 +372,19 @@
         .day-header {
             text-align: center;
             font-weight: 600;
-            padding: 0.5rem;
-            background: var(--primary-light);
+            padding: 0.75rem 0.5rem;
+            background: var(--white);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.875rem;
         }
 
         .day-cell {
-            min-height: 80px;
-            background: var(--bg-color);
-            border: 2px solid var(--border-color);
+            min-height: 100px;
+            background: var(--white);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 0.5rem;
+            padding: 0.75rem;
             font-size: 0.875rem;
         }
 
@@ -439,8 +439,9 @@
         }
 
         .stat-card {
-            background: var(--bg-color);
-            padding: 1rem;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
             border-radius: 8px;
             text-align: center;
         }
@@ -613,8 +614,8 @@
                         <span style="font-weight: 600; color: var(--text-primary);">Progresso Geral</span>
                         <span style="font-weight: 600; color: var(--primary-color);" id="progressPercentage">0%</span>
                     </div>
-                    <div style="height: 12px; background: var(--border-color); border-radius: 6px; overflow: hidden;">
-                        <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); width: 0%; transition: width 0.3s ease; border-radius: 6px;"></div>
+                    <div style="height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden;">
+                        <div id="progressBar" style="height: 100%; background: var(--primary-color); width: 0%; transition: width 0.3s ease; border-radius: 4px;"></div>
                     </div>
                 </div>
             </div>

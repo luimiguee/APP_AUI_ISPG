@@ -20,16 +20,50 @@ const dbConfig = {
 const pool = mysql.createPool(dbConfig);
 
 /**
+ * Criar base de dados se não existir
+ */
+async function createDatabaseIfNotExists() {
+    try {
+        // Criar conexão sem especificar a base de dados
+        const tempConfig = {
+            host: dbConfig.host,
+            user: dbConfig.user,
+            password: dbConfig.password,
+            waitForConnections: true,
+            connectionLimit: 10
+        };
+        
+        const tempPool = mysql.createPool(tempConfig);
+        
+        // Criar base de dados se não existir
+        await tempPool.execute(`CREATE DATABASE IF NOT EXISTS \`${dbConfig.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+        
+        await tempPool.end();
+        console.log(`✅ Base de dados "${dbConfig.database}" verificada/criada com sucesso!`);
+    } catch (error) {
+        console.error('❌ Erro ao criar base de dados:', error.message);
+        throw error;
+    }
+}
+
+/**
  * Testar conexão com a base de dados
  */
 async function testConnection() {
     try {
+        // Primeiro, garantir que a base de dados existe
+        await createDatabaseIfNotExists();
+        
+        // Depois, testar a conexão com a base de dados
         const connection = await pool.getConnection();
         console.log('✅ Conexão com MySQL estabelecida com sucesso!');
         connection.release();
         
         // Criar tabela de utilizadores se não existir
         await createUsersTable();
+        
+        // Verificar se existe algum administrador
+        await createFirstAdminIfNeeded();
         
         return true;
     } catch (error) {
@@ -56,11 +90,21 @@ async function createUsersTable() {
         
         await pool.execute(query);
         
-        // Adicionar coluna role se não existir (para tabelas antigas)
+        // Verificar e adicionar coluna role se não existir (para tabelas antigas)
         try {
-            await pool.execute('ALTER TABLE users ADD COLUMN role ENUM(\'user\', \'admin\') DEFAULT \'user\'');
+            const [columns] = await pool.execute(
+                `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+                 WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'users' AND COLUMN_NAME = 'role'`,
+                [dbConfig.database]
+            );
+            
+            if (columns.length === 0) {
+                await pool.execute('ALTER TABLE users ADD COLUMN role ENUM(\'user\', \'admin\') DEFAULT \'user\'');
+                console.log('✅ Coluna "role" adicionada à tabela users');
+            }
         } catch (e) {
-            // Coluna já existe, ignorar erro
+            // Erro ao verificar/adicionar coluna, continuar
+            console.warn('⚠️  Aviso ao verificar coluna role:', e.message);
         }
         
         console.log('✅ Tabela de utilizadores verificada/criada com sucesso!');
@@ -232,16 +276,34 @@ async function getGeneralStats() {
     }
 }
 
+/**
+ * Criar primeiro administrador se não existir nenhum
+ * Esta função pode ser chamada manualmente se necessário
+ */
+async function createFirstAdminIfNeeded() {
+    try {
+        const [admins] = await pool.execute('SELECT COUNT(*) as total FROM users WHERE role = "admin"');
+        
+        if (admins[0].total === 0) {
+            console.log('ℹ️  Nenhum administrador encontrado. Crie o primeiro administrador através do registo.');
+        }
+    } catch (error) {
+        console.error('Erro ao verificar administradores:', error.message);
+    }
+}
+
 module.exports = {
     pool,
     testConnection,
+    createDatabaseIfNotExists,
     registerUser,
     loginUser,
     getUserById,
     getAllUsers,
     updateUserRole,
     deleteUser,
-    getGeneralStats
+    getGeneralStats,
+    createFirstAdminIfNeeded
 };
 
 

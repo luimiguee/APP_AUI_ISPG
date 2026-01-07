@@ -30,6 +30,13 @@ Aplicação web completa para ajudar estudantes a organizarem o seu percurso aca
 - **Vista Semanal** - Calendário interativo com todos os eventos
 - **Estatísticas** - Contadores em tempo real
 
+### 👨‍💼 Painel de Administração
+- **Gestão de Utilizadores** - Ver, editar e remover utilizadores
+- **Estatísticas Gerais** - Total de utilizadores, administradores e novos registos
+- **Gestão de Roles** - Alterar papel de utilizadores (user/admin)
+- **Acesso Restrito** - Apenas administradores podem aceder
+- **Interface Limpa** - Design minimalista e fácil de usar
+
 ## 🚀 Instalação e Configuração
 
 ### Pré-requisitos
@@ -108,18 +115,41 @@ Após o login, será redirecionado para a aplicação principal onde pode:
 - Acompanhar estatísticas
 - Gerir todos os seus itens académicos
 
+### 5. Aceder ao Painel de Administração
+
+Se tiver permissões de administrador:
+1. Faça login como administrador
+2. Clique no botão **"Admin"** no header (apenas visível para admins)
+3. Ou aceda diretamente a: `http://localhost:3000/admin`
+
+No painel de administração pode:
+- Ver estatísticas gerais (total de utilizadores, administradores, etc.)
+- Gerir todos os utilizadores
+- Alterar roles (user/admin)
+- Remover utilizadores
+
+**Nota:** Para tornar um utilizador administrador, aceda ao phpMyAdmin e execute:
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'seu-email@exemplo.com';
+```
+
+Ou use a interface de administração se já tiver um admin criado.
+
 ## 🛠️ Estrutura do Projeto
 
 ```
 APP_AUI_ISPG/
 ├── index.html          # Página inicial com explicação e login/registo
 ├── studyflow.html      # Aplicação principal de gestão académica
+├── admin.html          # Painel de administração
 ├── server.js           # Servidor Express com API
 ├── database.js         # Configuração e funções MySQL
+├── init.sql            # Script SQL de inicialização da base de dados
 ├── package.json        # Dependências do projeto
 ├── docker-compose.yml  # Configuração Docker (MySQL + phpMyAdmin)
 ├── .env               # Variáveis de ambiente (criar manualmente)
 ├── README.md          # Este ficheiro
+├── SETUP_DATABASE.md  # Guia de configuração da base de dados
 ├── INSTALACAO.md      # Guia de instalação dos pré-requisitos
 └── STUDYFLOW_README.md # Documentação detalhada do StudyFlow
 ```
@@ -150,6 +180,46 @@ Registar um novo utilizador.
 
 ### GET `/api/user/:id`
 Obter dados de um utilizador por ID.
+
+### GET `/api/admin/stats` (Admin apenas)
+Obter estatísticas gerais do sistema (requer autenticação de administrador).
+
+**Headers:**
+```
+user-id: <id_do_admin>
+```
+
+### GET `/api/admin/users` (Admin apenas)
+Listar todos os utilizadores (requer autenticação de administrador).
+
+**Headers:**
+```
+user-id: <id_do_admin>
+```
+
+### PUT `/api/admin/users/:id/role` (Admin apenas)
+Atualizar o papel (role) de um utilizador.
+
+**Headers:**
+```
+user-id: <id_do_admin>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "role": "admin"
+}
+```
+
+### DELETE `/api/admin/users/:id` (Admin apenas)
+Remover um utilizador do sistema (requer autenticação de administrador).
+
+**Headers:**
+```
+user-id: <id_do_admin>
+```
 
 ## 🎨 Características de Acessibilidade
 
@@ -217,6 +287,7 @@ docker-compose down -v
 ## 📚 Documentação Adicional
 
 - `INSTALACAO.md` - Guia completo de instalação dos pré-requisitos
+- `SETUP_DATABASE.md` - Guia detalhado de configuração da base de dados
 - `STUDYFLOW_README.md` - Documentação detalhada do StudyFlow
 
 ## 🔧 Personalização

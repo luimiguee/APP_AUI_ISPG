@@ -13,32 +13,32 @@
         }
 
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
             --danger-color: #ef4444;
             --success-color: #10b981;
             --warning-color: #f59e0b;
-            --text-primary: #1f2937;
+            --text-primary: #111827;
             --text-secondary: #6b7280;
             --border-color: #e5e7eb;
-            --bg-color: #f9fafb;
+            --bg-color: #ffffff;
             --white: #ffffff;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --transition: all 0.2s ease-in-out;
+            --shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-color);
+            background: #fafafa;
             color: var(--text-primary);
             line-height: 1.6;
         }
 
         header {
             background: var(--white);
-            box-shadow: var(--shadow);
-            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -96,9 +96,9 @@
 
         .stat-card {
             background: var(--white);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
+            padding: 1.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
 
         .stat-label {
@@ -115,9 +115,9 @@
 
         .card {
             background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.75rem;
             margin-bottom: 1.5rem;
         }
 
@@ -127,7 +127,7 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .card-title {
@@ -149,11 +149,12 @@
         th {
             font-weight: 600;
             color: var(--text-primary);
-            background: var(--bg-color);
+            background: var(--white);
+            border-bottom: 2px solid var(--border-color);
         }
 
         tr:hover {
-            background: var(--bg-color);
+            background: #fafafa;
         }
 
         .badge {
@@ -241,6 +242,21 @@
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: var(--success-color);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #bbf7d0;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -273,6 +289,8 @@
 
     <main class="container" role="main">
         <h1 class="page-title">Painel de Administração</h1>
+
+        <div id="successMessage" class="success-message"></div>
 
         <!-- Estatísticas -->
         <div class="stats-grid" id="statsGrid">
@@ -329,6 +347,22 @@
             }
         });
 
+        // Função auxiliar para fazer parse seguro do JSON
+        async function safeJsonParse(response) {
+            const contentType = response.headers.get('content-type');
+            
+            if (contentType && contentType.includes('application/json')) {
+                try {
+                    const text = await response.text();
+                    return text ? JSON.parse(text) : {};
+                } catch (parseError) {
+                    console.error('Erro ao fazer parse do JSON:', parseError);
+                    return {};
+                }
+            }
+            return {};
+        }
+
         // Carregar Estatísticas
         async function loadStats() {
             try {
@@ -338,14 +372,19 @@
                     }
                 });
 
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar estatísticas');
-                }
+                const data = await safeJsonParse(response);
 
-                const data = await response.json();
-                document.getElementById('totalUsers').textContent = data.stats.totalUsers;
-                document.getElementById('totalAdmins').textContent = data.stats.totalAdmins;
-                document.getElementById('recentUsers').textContent = data.stats.recentUsers;
+                if (!response.ok) {
+                    throw new Error(data.error || 'Erro ao carregar estatísticas');
+                }
+                
+                if (data.success && data.stats) {
+                    document.getElementById('totalUsers').textContent = data.stats.totalUsers || 0;
+                    document.getElementById('totalAdmins').textContent = data.stats.totalAdmins || 0;
+                    document.getElementById('recentUsers').textContent = data.stats.recentUsers || 0;
+                } else {
+                    throw new Error('Resposta inválida do servidor');
+                }
             } catch (error) {
                 console.error('Erro:', error);
                 document.getElementById('statsGrid').innerHTML = 
@@ -365,12 +404,17 @@
                     }
                 });
 
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar utilizadores');
-                }
+                const data = await safeJsonParse(response);
 
-                const data = await response.json();
-                renderUsersTable(data.users);
+                if (!response.ok) {
+                    throw new Error(data.error || 'Erro ao carregar utilizadores');
+                }
+                
+                if (data.success && Array.isArray(data.users)) {
+                    renderUsersTable(data.users);
+                } else {
+                    throw new Error('Resposta inválida do servidor');
+                }
             } catch (error) {
                 container.innerHTML = `<div class="error">Erro ao carregar utilizadores: ${error.message}</div>`;
             }
@@ -447,12 +491,13 @@
                     body: JSON.stringify({ role: newRole })
                 });
 
+                const data = await safeJsonParse(response);
+
                 if (!response.ok) {
-                    const data = await response.json();
                     throw new Error(data.error || 'Erro ao atualizar role');
                 }
 
-                alert('Role atualizado com sucesso!');
+                showSuccess('Role atualizado com sucesso!');
                 loadUsers();
                 loadStats();
             } catch (error) {
@@ -475,12 +520,13 @@
                     }
                 });
 
+                const data = await safeJsonParse(response);
+
                 if (!response.ok) {
-                    const data = await response.json();
                     throw new Error(data.error || 'Erro ao remover utilizador');
                 }
 
-                alert('Utilizador removido com sucesso!');
+                showSuccess('Utilizador removido com sucesso!');
                 loadUsers();
                 loadStats();
             } catch (error) {
@@ -494,6 +540,17 @@
                 localStorage.removeItem('studyflow_user');
                 window.location.href = '/';
             }
+        }
+
+        // Mostrar mensagem de sucesso
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.classList.add('show');
+            
+            setTimeout(() => {
+                successEl.classList.remove('show');
+            }, 3000);
         }
 
         // Utilitário

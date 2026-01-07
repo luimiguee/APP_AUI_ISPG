@@ -21,12 +21,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'user-id']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir ficheiros estáticos (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname)));
+// Tratar pedidos OPTIONS (preflight)
+app.options('*', cors());
 
 // Testar conexão ao iniciar
 testConnection().then(success => {
@@ -37,7 +41,7 @@ testConnection().then(success => {
     }
 });
 
-// Rotas da API
+// Rotas da API (DEVEM estar ANTES do express.static)
 
 /**
  * Rota de teste
@@ -184,6 +188,19 @@ app.get('/studyflow', (req, res) => {
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
+
+// Middleware para excluir rotas /api/* do servidor estático
+// Deve estar ANTES do express.static para garantir que rotas da API não são servidas como estáticas
+app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+        // Se chegou aqui, a rota da API não foi encontrada nas rotas definidas acima
+        return res.status(404).json({ error: 'Rota da API não encontrada' });
+    }
+    next();
+});
+
+// Servir ficheiros estáticos (HTML, CSS, JS) - DEPOIS das rotas da API
+app.use(express.static(path.join(__dirname)));
 
 // Middleware para verificar se é admin
 async function checkAdmin(req, res, next) {
