@@ -1,144 +1,263 @@
-# Interface de Login Acessível
+# StudyFlow - Gestão Académica Inteligente
 
-Esta interface de login foi desenvolvida seguindo as melhores práticas de **acessibilidade (WCAG 2.1)** e **experiência do utilizador (UX)** para garantir que seja funcional para todas as pessoas.
+Aplicação web completa para ajudar estudantes a organizarem o seu percurso académico, permitindo a gestão de tarefas, trabalhos, testes e horários de forma simples, intuitiva e visualmente clara.
 
-## 🎯 Normas e Práticas Implementadas
+## 🎯 Funcionalidades Gerais
 
-### 1. **Acessibilidade (WCAG 2.1)**
+### ✅ Página Inicial
+- **Explicação da aplicação** - Apresentação clara do propósito e funcionalidades
+- **Design moderno e atrativo** - Interface visualmente apelativa
+- **Call-to-action** - Botões para registo e login facilmente acessíveis
+- **Secção de funcionalidades** - Descrição detalhada de todas as capacidades
 
-#### Semântica HTML
-- ✅ Uso de elementos semânticos (`<main>`, `<header>`, `<form>`, `<label>`)
-- ✅ Estrutura lógica e hierárquica do conteúdo
-- ✅ Atributos ARIA apropriados (`aria-label`, `aria-required`, `aria-invalid`, `aria-describedby`)
+### 🔐 Registo e Login de Utilizadores
+- **Sistema de autenticação completo** - Integrado com MySQL
+- **Registo de novos utilizadores** - Com validação de dados
+- **Login seguro** - Com encriptação de passwords (bcrypt)
+- **Gestão de sessão** - Persistência de autenticação
+- **Modais acessíveis** - Formulários com validação em tempo real
 
-#### Navegação por Teclado
-- ✅ Todos os elementos interativos são acessíveis via teclado
-- ✅ Indicadores de foco visíveis (`:focus-visible`)
-- ✅ Ordem de tabulação lógica
-- ✅ Suporte completo para navegação sem rato
+### 📱 Interface Responsiva
+- **Design adaptável** - Funciona em desktop, tablet e mobile
+- **Layout flexível** - Grid system responsivo
+- **Navegação otimizada** - Menu adaptável ao tamanho do ecrã
+- **Touch-friendly** - Botões e elementos otimizados para toque
 
-#### Leitores de Ecrã
-- ✅ Labels associados a todos os campos
-- ✅ Mensagens de erro anunciadas em tempo real (`aria-live="polite"`)
-- ✅ Atributos `aria-describedby` para associar ajuda e erros aos campos
-- ✅ Textos alternativos para elementos visuais
+### 📚 Gestão Académica
+- **Tarefas** - Adicionar, editar, remover e marcar como concluídas
+- **Trabalhos** - Com acompanhamento de progresso (0-100%)
+- **Testes** - Com data, hora e prioridades
+- **Vista Semanal** - Calendário interativo com todos os eventos
+- **Estatísticas** - Contadores em tempo real
 
-#### Contraste e Visibilidade
-- ✅ Contraste mínimo de 4.5:1 para texto normal
-- ✅ Contraste mínimo de 3:1 para texto grande
-- ✅ Suporte para modo de alto contraste (`@media (prefers-contrast: high)`)
-- ✅ Indicadores visuais claros para estados (foco, erro, sucesso)
+## 🚀 Instalação e Configuração
 
-### 2. **Validação de Formulário**
+### Pré-requisitos
 
-#### Validação em Tempo Real
-- ✅ Validação durante a digitação (`input` event)
-- ✅ Validação ao sair do campo (`blur` event)
-- ✅ Mensagens de erro claras e específicas
-- ✅ Indicadores visuais de campos válidos/inválidos
+- Node.js (versão 14 ou superior)
+- Docker e Docker Compose (para MySQL e phpMyAdmin)
+- npm ou yarn
 
-#### Validação de Email
-- ✅ Verificação de formato válido (regex)
-- ✅ Mensagem de erro específica
-- ✅ Atributo `type="email"` para validação nativa do navegador
+### Passo 1: Instalar Dependências
 
-#### Validação de Senha
-- ✅ Mínimo de 8 caracteres
-- ✅ Indicador visual de força da senha
-- ✅ Feedback em tempo real sobre a segurança
+```bash
+npm install
+```
 
-### 3. **Experiência do Utilizador (UX)**
+### Passo 2: Configurar Variáveis de Ambiente
 
-#### Design Moderno e Limpo
-- ✅ Interface visualmente atraente
-- ✅ Espaçamento adequado entre elementos
-- ✅ Tipografia legível e hierarquia clara
-- ✅ Cores consistentes e profissionais
+Crie um ficheiro `.env` na raiz do projeto:
 
-#### Feedback Visual
-- ✅ Estados de hover, focus e active bem definidos
-- ✅ Transições suaves (respeitando `prefers-reduced-motion`)
-- ✅ Mensagens de sucesso e erro claras
-- ✅ Indicador de carregamento durante submissão
+```env
+# Configuração da Base de Dados MySQL
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=rootpassword
+DB_NAME=app_aui_ispg
 
-#### Responsividade
+# Porta do Servidor
+PORT=3000
+```
+
+### Passo 3: Iniciar MySQL e phpMyAdmin
+
+```bash
+docker-compose up -d
+```
+
+Aguarde alguns segundos para que os serviços iniciem completamente.
+
+### Passo 4: Iniciar o Servidor
+
+```bash
+npm start
+```
+
+Ou para desenvolvimento com auto-reload:
+
+```bash
+npm run dev
+```
+
+## 📖 Como Usar
+
+### 1. Aceder à Aplicação
+
+Abra o navegador e aceda a: `http://localhost:3000`
+
+### 2. Criar Conta
+
+1. Clique em **"Criar Conta"** ou **"Começar Agora"**
+2. Preencha o formulário:
+   - Email (obrigatório)
+   - Palavra-passe (mínimo 8 caracteres)
+   - Confirmação de palavra-passe
+3. Clique em **"Criar Conta"**
+
+### 3. Fazer Login
+
+1. Clique em **"Iniciar Sessão"**
+2. Introduza o seu email e palavra-passe
+3. Clique em **"Iniciar Sessão"**
+
+### 4. Usar o StudyFlow
+
+Após o login, será redirecionado para a aplicação principal onde pode:
+- Adicionar tarefas, trabalhos e testes
+- Visualizar o calendário semanal
+- Acompanhar estatísticas
+- Gerir todos os seus itens académicos
+
+## 🛠️ Estrutura do Projeto
+
+```
+APP_AUI_ISPG/
+├── index.html          # Página inicial com explicação e login/registo
+├── studyflow.html      # Aplicação principal de gestão académica
+├── server.js           # Servidor Express com API
+├── database.js         # Configuração e funções MySQL
+├── package.json        # Dependências do projeto
+├── docker-compose.yml  # Configuração Docker (MySQL + phpMyAdmin)
+├── .env               # Variáveis de ambiente (criar manualmente)
+├── README.md          # Este ficheiro
+├── INSTALACAO.md      # Guia de instalação dos pré-requisitos
+└── STUDYFLOW_README.md # Documentação detalhada do StudyFlow
+```
+
+## 📡 Endpoints da API
+
+### POST `/api/login`
+Fazer login de um utilizador.
+
+**Body:**
+```json
+{
+  "email": "utilizador@exemplo.com",
+  "password": "senha123"
+}
+```
+
+### POST `/api/register`
+Registar um novo utilizador.
+
+**Body:**
+```json
+{
+  "email": "novo@exemplo.com",
+  "password": "senha123"
+}
+```
+
+### GET `/api/user/:id`
+Obter dados de um utilizador por ID.
+
+## 🎨 Características de Acessibilidade
+
+### WCAG 2.1 Compliance
+- ✅ Semântica HTML correta
+- ✅ Atributos ARIA apropriados
+- ✅ Navegação completa por teclado
+- ✅ Indicadores de foco visíveis
+- ✅ Contraste adequado (4.5:1 mínimo)
+- ✅ Suporte para leitores de ecrã
+- ✅ Mensagens de erro claras
+
+### Responsividade
 - ✅ Design adaptável a diferentes tamanhos de ecrã
 - ✅ Layout otimizado para dispositivos móveis
 - ✅ Texto e elementos redimensionáveis
+- ✅ Menu adaptável
 
-### 4. **Segurança**
-
-#### Boas Práticas
-- ✅ Atributo `autocomplete` apropriado
-- ✅ Tipo de input correto (`email`, `password`)
-- ✅ Validação tanto no cliente quanto preparada para servidor
-- ✅ Prevenção de submissão dupla
-
-### 5. **Performance e Acessibilidade Avançada**
-
-#### Preferências do Utilizador
-- ✅ Respeita `prefers-reduced-motion` (animações reduzidas)
+### Preferências do Utilizador
+- ✅ Respeita `prefers-reduced-motion`
 - ✅ Suporte para modo escuro (`prefers-color-scheme: dark`)
 - ✅ Suporte para alto contraste (`prefers-contrast: high`)
 
-#### Acessibilidade de Conteúdo
-- ✅ Textos de ajuda para cada campo
-- ✅ Indicadores de campos obrigatórios
-- ✅ Links com texto descritivo
-- ✅ Mensagens de erro específicas e acionáveis
+## 🔒 Segurança
 
-## 📋 Checklist de Acessibilidade
+- ✅ Passwords encriptadas com bcrypt
+- ✅ Validação tanto no cliente quanto no servidor
+- ✅ Proteção contra SQL injection (prepared statements)
+- ✅ Validação de entrada de dados
+- ✅ Gestão segura de sessões
 
-- [x] Todos os campos têm labels associados
-- [x] Campos obrigatórios estão claramente marcados
-- [x] Mensagens de erro são anunciadas por leitores de ecrã
-- [x] Navegação completa por teclado
-- [x] Contraste adequado em todos os elementos
-- [x] Foco visível em todos os elementos interativos
-- [x] Formulário funciona sem JavaScript (validação HTML5)
-- [x] Textos alternativos para elementos visuais
-- [x] Estrutura semântica correta
-- [x] Suporte para diferentes preferências do utilizador
+## 📊 Acesso ao phpMyAdmin
 
-## 🚀 Como Usar
-
-1. Abra o ficheiro `index.html` num navegador moderno
-2. Preencha os campos de email e palavra-passe
-3. Observe a validação em tempo real
-4. Teste a navegação apenas com teclado (Tab, Enter, Shift+Tab)
-5. Teste com um leitor de ecrã (NVDA, JAWS, VoiceOver)
+1. Aceda a: `http://localhost:8080`
+2. **Credenciais:**
+   - **Servidor:** `mysql` (ou `localhost`)
+   - **Utilizador:** `root`
+   - **Palavra-passe:** `rootpassword`
 
 ## 🧪 Testes Recomendados
 
 ### Testes de Acessibilidade
 - ✅ Navegação apenas com teclado
 - ✅ Teste com leitor de ecrã (NVDA/JAWS/VoiceOver)
-- ✅ Verificação de contraste (ferramentas como WebAIM Contrast Checker)
+- ✅ Verificação de contraste
 - ✅ Validação com WAVE ou axe DevTools
 
 ### Testes de Funcionalidade
-- ✅ Validação de campos obrigatórios
-- ✅ Validação de formato de email
-- ✅ Validação de comprimento de senha
-- ✅ Submissão do formulário
-- ✅ Mensagens de erro e sucesso
+- ✅ Registo e login de utilizadores
+- ✅ Gestão de tarefas, trabalhos e testes
+- ✅ Vista semanal
+- ✅ Estatísticas
+- ✅ Responsividade em diferentes dispositivos
+
+## 🛑 Parar os Serviços
+
+```bash
+# Parar MySQL e phpMyAdmin
+docker-compose down
+
+# Parar e remover volumes (apaga dados)
+docker-compose down -v
+```
+
+## 📚 Documentação Adicional
+
+- `INSTALACAO.md` - Guia completo de instalação dos pré-requisitos
+- `STUDYFLOW_README.md` - Documentação detalhada do StudyFlow
+
+## 🔧 Personalização
+
+### Cores
+Modifique as variáveis CSS em `:root` nos ficheiros HTML:
+```css
+:root {
+    --primary-color: #4f46e5;
+    --secondary-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+}
+```
+
+### Base de Dados
+Ajuste a configuração em `database.js` e `docker-compose.yml` conforme necessário.
+
+## 🆘 Resolução de Problemas
+
+### Erro de conexão à base de dados
+- Verifique se o Docker está a correr: `docker-compose ps`
+- Verifique os logs: `docker-compose logs mysql`
+- Aguarde alguns segundos após iniciar o Docker
+
+### Porta já em uso
+- Altere a porta no ficheiro `.env` (PORT=3001)
+- Ou altere a porta do phpMyAdmin no `docker-compose.yml`
+
+### Dados não são guardados
+- Verifique se o navegador permite localStorage
+- Não use modo privado/incógnito
 
 ## 📚 Recursos Adicionais
 
 - [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [WebAIM - Web Accessibility In Mind](https://webaim.org/)
 - [MDN - Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
-- [A11y Project](https://www.a11yproject.com/)
-
-## 🔧 Personalização
-
-Para adaptar esta interface às suas necessidades:
-
-1. **Cores**: Modifique as variáveis CSS em `:root`
-2. **Validação**: Ajuste as funções de validação no JavaScript
-3. **API**: Substitua `simulateLogin()` pela sua chamada real à API
-4. **Mensagens**: Personalize as mensagens de erro e sucesso
+- [MySQL Documentation](https://dev.mysql.com/doc/)
+- [Express.js Documentation](https://expressjs.com/)
 
 ---
 
-**Desenvolvido com foco em acessibilidade e inclusão digital** ♿️
+**Desenvolvido com foco em acessibilidade, usabilidade e eficiência** 🎓

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interface de login acessível e funcional">
-    <title>Login - Interface Acessível</title>
+    <meta name="description" content="StudyFlow - Organize o seu percurso académico de forma simples e eficiente">
+    <title>StudyFlow - Gestão Académica Inteligente</title>
     <style>
         /* Reset e Variáveis CSS */
         * {
@@ -14,15 +14,13 @@
         }
 
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --primary-focus: #3b82f6;
-            --error-color: #dc2626;
-            --error-bg: #fef2f2;
-            --success-color: #16a34a;
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary-color: #10b981;
             --text-primary: #1f2937;
             --text-secondary: #6b7280;
-            --border-color: #d1d5db;
+            --border-color: #e5e7eb;
             --bg-color: #f9fafb;
             --white: #ffffff;
             --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -30,7 +28,6 @@
             --transition: all 0.2s ease-in-out;
         }
 
-        /* Preferência de movimento reduzido */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -42,603 +39,1149 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--primary-color);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* Container Principal */
-        .login-container {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 420px;
-            padding: 2.5rem;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Cabeçalho */
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .login-header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .login-header p {
-            color: var(--text-secondary);
-            font-size: 0.9375rem;
-        }
-
-        /* Formulário */
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        /* Grupo de Campo */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        /* Label */
-        label {
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 0.9375rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .required-indicator {
-            color: var(--error-color);
-            font-weight: 600;
-        }
-
-        /* Input */
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--white);
-            color: var(--text-primary);
-            transition: var(--transition);
-            font-family: inherit;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-focus);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        input:focus-visible {
-            outline: 2px solid var(--primary-focus);
-            outline-offset: 2px;
-        }
-
-        input:invalid:not(:placeholder-shown) {
-            border-color: var(--error-color);
-        }
-
-        input:valid:not(:placeholder-shown) {
-            border-color: var(--success-color);
-        }
-
-        /* Mensagens de Erro */
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            margin-top: 0.25rem;
-        }
-
-        .error-message::before {
-            content: "⚠";
-            font-size: 1rem;
-        }
-
-        .error-message[aria-hidden="true"] {
-            display: none;
-        }
-
-        /* Mensagens de Ajuda */
-        .help-text {
-            color: var(--text-secondary);
-            font-size: 0.8125rem;
-            margin-top: 0.25rem;
-        }
-
-        /* Checkbox - Lembrar-me */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 1.25rem;
-            height: 1.25rem;
-            cursor: pointer;
-            accent-color: var(--primary-color);
-        }
-
-        .checkbox-group label {
-            cursor: pointer;
-            font-weight: 400;
-            margin: 0;
-        }
-
-        /* Botão */
-        .btn {
-            width: 100%;
-            padding: 0.875rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
             color: var(--white);
-            background-color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--white);
+            padding: 5rem 2rem;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-color);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--bg-color);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
 
-        .btn:active {
-            transform: translateY(0);
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-color);
         }
 
         .btn:focus-visible {
-            outline: 2px solid var(--primary-focus);
+            outline: 2px solid var(--white);
             outline-offset: 2px;
         }
 
-        .btn:disabled {
+        /* Modal - Design Inovador */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 24px;
+            padding: 0;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed, #ec4899);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .modal-inner {
+            padding: 2.5rem;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .modal-logo {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.75rem;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        /* Form Tabs */
+        .form-tabs {
+            display: flex;
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-tab.active {
+            color: var(--primary-color);
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Groups com Ícones */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(233, 233, 238, 0.1);
+            transform: translateY(-1px);
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.625rem;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message::before {
+            content: '⚠';
+            font-size: 1rem;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        input.error {
+            border-color: #ef4444;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .form-footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+            color: var(--primary-hover);
+        }
+
+        /* Submit Button Moderno */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* Link */
-        .form-link {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .form-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9375rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .form-link a:hover {
-            text-decoration: underline;
-        }
-
-        .form-link a:focus-visible {
-            outline: 2px solid var(--primary-focus);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-
-        /* Mensagem de Sucesso/Erro Global */
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 0.9375rem;
-        }
-
-        .alert-error {
-            background-color: var(--error-bg);
-            color: var(--error-color);
-            border: 1px solid var(--error-color);
-        }
-
-        .alert-success {
-            background-color: #f0fdf4;
-            color: var(--success-color);
-            border: 1px solid var(--success-color);
-        }
-
-        .alert[role="alert"] {
-            display: none;
-        }
-
-        .alert[role="alert"]:not([aria-hidden="true"]) {
-            display: flex;
-        }
-
-        /* Indicador de Força de Senha */
+        /* Password Strength Indicator */
         .password-strength {
             margin-top: 0.5rem;
-            font-size: 0.8125rem;
-        }
-
-        .strength-bar {
             height: 4px;
-            background-color: var(--border-color);
+            background: var(--border-color);
             border-radius: 2px;
-            margin-top: 0.5rem;
             overflow: hidden;
         }
 
-        .strength-bar-fill {
+        .password-strength-bar {
             height: 100%;
             width: 0%;
-            transition: var(--transition);
+            transition: width 0.3s ease, background-color 0.3s ease;
             border-radius: 2px;
         }
 
-        .strength-weak {
-            background-color: var(--error-color);
+        .password-strength-bar.weak {
             width: 33%;
+            background: #ef4444;
         }
 
-        .strength-medium {
-            background-color: #f59e0b;
+        .password-strength-bar.medium {
             width: 66%;
+            background: #f59e0b;
         }
 
-        .strength-strong {
-            background-color: var(--success-color);
+        .password-strength-bar.strong {
             width: 100%;
+            background: #10b981;
         }
 
-        /* Responsividade */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 1.5rem;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
             }
 
-            .login-header h1 {
-                font-size: 1.5rem;
+            .hero p {
+                font-size: 1.125rem;
+            }
+
+            .features-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 1rem;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
 
-        /* Modo de Alto Contraste */
-        @media (prefers-contrast: high) {
-            :root {
-                --border-color: #000000;
-                --text-primary: #000000;
-            }
-
-            input {
-                border-width: 3px;
-            }
-        }
-
-        /* Modo Escuro (opcional) */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #111827;
                 --text-primary: #f9fafb;
                 --text-secondary: #d1d5db;
+                --bg-color: #1f2937;
+                --white: #111827;
                 --border-color: #374151;
-                --white: #1f2937;
-            }
-
-            body {
-                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             }
         }
     </style>
 </head>
 <body>
-    <main class="login-container" role="main">
-        <header class="login-header">
-            <h1>Iniciar Sessão</h1>
-            <p>Por favor, introduza as suas credenciais para continuar</p>
-        </header>
+    <header role="banner">
+        <div class="header-content">
+            <a href="#" class="logo" aria-label="StudyFlow - Página inicial">
+                <span class="logo-icon">SF</span>
+                <span>StudyFlow</span>
+            </a>
+            <nav class="nav-buttons" aria-label="Navegação principal">
+                <button class="btn btn-secondary" id="loginBtn" aria-label="Iniciar sessão">Iniciar Sessão</button>
+                <button class="btn btn-primary" id="registerBtn" aria-label="Criar conta">Criar Conta</button>
+            </nav>
+        </div>
+    </header>
 
-        <!-- Mensagem de Alerta Global -->
-        <div id="global-alert" class="alert alert-error" role="alert" aria-live="polite" aria-atomic="true" aria-hidden="true"></div>
-
-        <form class="login-form" id="loginForm" novalidate aria-label="Formulário de login">
-            <!-- Campo Email -->
-            <div class="form-group">
-                <label for="email">
-                    Endereço de Email
-                    <span class="required-indicator" aria-label="obrigatório">*</span>
-                </label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    autocomplete="email"
-                    placeholder="exemplo@email.com"
-                    required
-                    aria-required="true"
-                    aria-invalid="false"
-                    aria-describedby="email-error email-help"
-                />
-                <span id="email-error" class="error-message" role="alert" aria-live="polite" aria-hidden="true"></span>
-                <span id="email-help" class="help-text">Introduza o seu endereço de email válido</span>
+    <main role="main">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-title">
+            <h1 id="hero-title">Organize o Seu Percurso Académico</h1>
+            <p>
+                StudyFlow é uma aplicação web desenvolvida para ajudar estudantes a organizarem o seu percurso académico, 
+                permitindo a gestão de tarefas, trabalhos, testes e horários de forma simples, intuitiva e visualmente clara.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" id="heroRegisterBtn" aria-label="Começar agora">Começar Agora</button>
+                <a href="#features" class="btn btn-secondary" aria-label="Saber mais">Saber Mais</a>
             </div>
+        </section>
 
-            <!-- Campo Senha -->
-            <div class="form-group">
-                <label for="password">
-                    Palavra-passe
-                    <span class="required-indicator" aria-label="obrigatório">*</span>
-                </label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    autocomplete="current-password"
-                    placeholder="Introduza a sua palavra-passe"
-                    required
-                    aria-required="true"
-                    aria-invalid="false"
-                    aria-describedby="password-error password-strength"
-                    minlength="8"
-                />
-                <span id="password-error" class="error-message" role="alert" aria-live="polite" aria-hidden="true"></span>
-                <div id="password-strength" class="password-strength" aria-live="polite">
-                    <div class="strength-bar">
-                        <div class="strength-bar-fill" id="strength-bar-fill"></div>
-                    </div>
+        <!-- Features Section -->
+        <section class="features" id="features" aria-labelledby="features-title">
+            <div class="features-container">
+                <h2 id="features-title" class="features-title">Funcionalidades</h2>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3>Gestão de Tarefas</h3>
+                        <p>
+                            Adicione, edite e organize todas as suas tarefas académicas. Defina prioridades, 
+                            associe disciplinas e acompanhe o progresso de forma visual e intuitiva.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">📄</div>
+                        <h3>Gestão de Trabalhos</h3>
+                        <p>
+                            Mantenha controlo sobre todos os seus trabalhos. Defina prazos, acompanhe o progresso 
+                            (0-100%) e nunca mais perca um prazo importante.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>Gestão de Testes</h3>
+                        <p>
+                            Organize os seus testes e exames. Defina datas, horas e prioridades para garantir 
+                            que está sempre preparado.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3>Vista Semanal</h3>
+                        <p>
+                            Visualize todos os seus compromissos numa vista semanal interativa. Veja de relance 
+                            o que tem pela frente e planeie melhor o seu tempo.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Estatísticas</h3>
+                        <p>
+                            Acompanhe o seu progresso com estatísticas em tempo real. Veja quantas tarefas, 
+                            trabalhos e testes tem, e identifique itens urgentes.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">♿</div>
+                        <h3>Totalmente Acessível</h3>
+                        <p>
+                            Desenvolvido seguindo as melhores práticas de acessibilidade (WCAG 2.1). 
+                            Navegação por teclado, suporte para leitores de ecrã e design responsivo.
+                        </p>
+                    </article>
                 </div>
             </div>
+        </section>
 
-            <!-- Checkbox Lembrar-me -->
-            <div class="checkbox-group">
-                <input
-                    type="checkbox"
-                    id="remember"
-                    name="remember"
-                />
-                <label for="remember">Lembrar-me neste dispositivo</label>
+        <!-- CTA Section -->
+        <section class="cta" aria-labelledby="cta-title">
+            <div class="cta-container">
+                <h2 id="cta-title">Pronto para Começar?</h2>
+                <p>
+                    Junte-se aos estudantes que já estão a organizar melhor o seu percurso académico com StudyFlow.
+                </p>
+                <button class="btn btn-primary" id="ctaRegisterBtn" aria-label="Criar conta gratuita">
+                    Criar Conta Gratuita
+                </button>
             </div>
-
-            <!-- Botão de Submissão -->
-            <button type="submit" class="btn" id="submitBtn">
-                Iniciar Sessão
-            </button>
-        </form>
-
-        <!-- Links Úteis -->
-        <div class="form-link">
-            <a href="#" id="forgot-password">Esqueceu-se da palavra-passe?</a>
-        </div>
+        </section>
     </main>
 
+    <footer role="contentinfo">
+        <p>&copy; 2026 StudyFlow. Desenvolvido com foco em acessibilidade e inclusão digital.</p>
+    </footer>
+
+    <!-- Auth Modal Unificado -->
+    <div class="modal" id="authModal" role="dialog" aria-labelledby="authModalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <button class="btn-close" id="closeAuthModal" aria-label="Fechar modal">&times;</button>
+            <div class="modal-inner">
+                <div class="modal-header">
+                    <div class="modal-logo">SF</div>
+                    <h2 id="authModalTitle" class="modal-title">Bem-vindo ao StudyFlow</h2>
+                    <p class="modal-subtitle">Organize o seu percurso académico de forma inteligente</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="form-tabs" role="tablist">
+                    <button class="form-tab active" id="loginTab" role="tab" aria-selected="true" aria-controls="loginPanel">
+                        Iniciar Sessão
+                    </button>
+                    <button class="form-tab" id="registerTab" role="tab" aria-selected="false" aria-controls="registerPanel">
+                        Criar Conta
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" aria-label="Formulário de login" role="tabpanel" id="loginPanel" aria-labelledby="loginTab">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="email" 
+                                id="loginEmail" 
+                                name="email" 
+                                required 
+                                aria-required="true" 
+                                autocomplete="email"
+                            >
+                        </div>
+                        <span class="error-message" id="loginEmailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Palavra-passe</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="loginPassword" 
+                                name="password" 
+                                required 
+                                aria-required="true" 
+                                autocomplete="current-password"
+                            >
+                        </div>
+                        <span class="error-message" id="loginPasswordError"></span>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        Iniciar Sessão
+                    </button>
+                    <div class="form-footer">
+                        Não tem conta? <a href="#" id="switchToRegister">Criar conta agora</a>
+                    </div>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" aria-label="Formulário de registo" role="tabpanel" id="registerPanel" aria-labelledby="registerTab" style="display: none;">
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="email" 
+                                id="registerEmail" 
+                                name="email" 
+                                required 
+                                aria-required="true" 
+                                autocomplete="email"
+                            >
+                        </div>
+                        <span class="error-message" id="registerEmailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Palavra-passe</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="registerPassword" 
+                                name="password" 
+                                required 
+                                aria-required="true" 
+                                autocomplete="new-password" 
+                                minlength="8"
+                            >
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <span class="error-message" id="registerPasswordError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPasswordConfirm">Confirmar Palavra-passe</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="registerPasswordConfirm" 
+                                name="passwordConfirm" 
+                                required 
+                                aria-required="true" 
+                                autocomplete="new-password"
+                            >
+                        </div>
+                        <span class="error-message" id="registerPasswordConfirmError"></span>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        Criar Conta
+                    </button>
+                    <div class="form-footer">
+                        Já tem conta? <a href="#" id="switchToLogin">Iniciar sessão</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Referências aos elementos
-        const form = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const emailError = document.getElementById('email-error');
-        const passwordError = document.getElementById('password-error');
-        const globalAlert = document.getElementById('global-alert');
-        const submitBtn = document.getElementById('submitBtn');
-        const strengthBarFill = document.getElementById('strength-bar-fill');
+        // Estado
+        let currentUser = null;
 
-        // Validação em tempo real
-        emailInput.addEventListener('input', () => validateEmail());
-        emailInput.addEventListener('blur', () => validateEmail());
-        passwordInput.addEventListener('input', () => {
-            validatePassword();
-            checkPasswordStrength();
+        // Verificar se já está autenticado
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('studyflow_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    // Redirecionar para StudyFlow se já estiver autenticado
+                    if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+                        window.location.href = '/studyflow';
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar utilizador:', e);
+                }
+            }
+
+            setupEventListeners();
         });
-        passwordInput.addEventListener('blur', () => validatePassword());
 
-        // Validação de Email
-        function validateEmail() {
-            const email = emailInput.value.trim();
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // Event Listeners
+        function setupEventListeners() {
+            const authModal = document.getElementById('authModal');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
 
-            if (!email) {
-                showError(emailInput, emailError, 'O endereço de email é obrigatório');
-                return false;
-            } else if (!emailRegex.test(email)) {
-                showError(emailInput, emailError, 'Por favor, introduza um endereço de email válido');
-                return false;
+            // Botões para abrir modal
+            document.getElementById('loginBtn').addEventListener('click', () => openAuthModal('login'));
+            document.getElementById('registerBtn').addEventListener('click', () => openAuthModal('register'));
+            document.getElementById('heroRegisterBtn').addEventListener('click', () => openAuthModal('register'));
+            document.getElementById('ctaRegisterBtn').addEventListener('click', () => openAuthModal('register'));
+
+            // Fechar modal
+            document.getElementById('closeAuthModal').addEventListener('click', closeAuthModal);
+            authModal.addEventListener('click', (e) => {
+                if (e.target.id === 'authModal') closeAuthModal();
+            });
+
+            // Tabs
+            loginTab.addEventListener('click', () => switchTab('login'));
+            registerTab.addEventListener('click', () => switchTab('register'));
+
+            // Alternar entre login e registo via links
+            document.getElementById('switchToRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab('register');
+            });
+
+            document.getElementById('switchToLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab('login');
+            });
+
+            // Formulários
+            loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+
+            // Validação em tempo real
+            document.getElementById('registerPassword').addEventListener('input', (e) => {
+                validatePassword();
+                updatePasswordStrength(e.target.value);
+            });
+            document.getElementById('registerPasswordConfirm').addEventListener('input', validatePasswordConfirm);
+        }
+
+        // Abrir Modal de Autenticação
+        function openAuthModal(tab = 'login') {
+            const modal = document.getElementById('authModal');
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            switchTab(tab);
+            
+            // Focar no primeiro campo após animação
+            setTimeout(() => {
+                const firstInput = modal.querySelector(`#${tab === 'login' ? 'loginEmail' : 'registerEmail'}`);
+                if (firstInput) firstInput.focus();
+            }, 300);
+        }
+
+        // Fechar Modal
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            
+            // Limpar erros
+            modal.querySelectorAll('.error-message').forEach(el => {
+                el.classList.remove('show');
+                el.textContent = '';
+            });
+            
+            // Limpar formulários
+            document.getElementById('loginForm').reset();
+            document.getElementById('registerForm').reset();
+            document.getElementById('passwordStrengthBar').className = 'password-strength-bar';
+        }
+
+        // Alternar entre Tabs
+        function switchTab(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginTab.setAttribute('aria-selected', 'true');
+                registerTab.setAttribute('aria-selected', 'false');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                document.getElementById('authModalTitle').textContent = 'Bem-vindo de volta';
             } else {
-                clearError(emailInput, emailError);
-                return true;
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerTab.setAttribute('aria-selected', 'true');
+                loginTab.setAttribute('aria-selected', 'false');
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                document.getElementById('authModalTitle').textContent = 'Criar sua conta';
             }
         }
 
-        // Validação de Senha
-        function validatePassword() {
-            const password = passwordInput.value;
-
-            if (!password) {
-                showError(passwordInput, passwordError, 'A palavra-passe é obrigatória');
-                return false;
-            } else if (password.length < 8) {
-                showError(passwordInput, passwordError, 'A palavra-passe deve ter pelo menos 8 caracteres');
-                return false;
-            } else {
-                clearError(passwordInput, passwordError);
-                return true;
-            }
-        }
-
-        // Verificar Força da Senha
-        function checkPasswordStrength() {
-            const password = passwordInput.value;
+        // Atualizar Indicador de Força de Password
+        function updatePasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrengthBar');
             let strength = 0;
-            let strengthClass = '';
-            let strengthText = '';
-
+            
             if (password.length >= 8) strength++;
             if (password.length >= 12) strength++;
             if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
             if (/\d/.test(password)) strength++;
             if (/[^a-zA-Z\d]/.test(password)) strength++;
-
-            if (strength <= 2) {
-                strengthClass = 'strength-weak';
-                strengthText = 'Fraca';
+            
+            strengthBar.className = 'password-strength-bar';
+            if (strength <= 2 && password.length > 0) {
+                strengthBar.classList.add('weak');
             } else if (strength <= 3) {
-                strengthClass = 'strength-medium';
-                strengthText = 'Média';
-            } else {
-                strengthClass = 'strength-strong';
-                strengthText = 'Forte';
+                strengthBar.classList.add('medium');
+            } else if (strength >= 4) {
+                strengthBar.classList.add('strong');
             }
-
-            strengthBarFill.className = `strength-bar-fill ${strengthClass}`;
-            strengthBarFill.setAttribute('aria-label', `Força da senha: ${strengthText}`);
         }
 
-        // Mostrar Erro
-        function showError(input, errorElement, message) {
-            input.setAttribute('aria-invalid', 'true');
-            errorElement.textContent = message;
-            errorElement.setAttribute('aria-hidden', 'false');
-            input.classList.add('error');
-        }
 
-        // Limpar Erro
-        function clearError(input, errorElement) {
-            input.setAttribute('aria-invalid', 'false');
-            errorElement.setAttribute('aria-hidden', 'true');
-            errorElement.textContent = '';
-            input.classList.remove('error');
-        }
-
-        // Mostrar Alerta Global
-        function showGlobalAlert(message, type = 'error') {
-            globalAlert.textContent = message;
-            globalAlert.className = `alert alert-${type}`;
-            globalAlert.setAttribute('aria-hidden', 'false');
+        // Validação de Password
+        function validatePassword() {
+            const password = document.getElementById('registerPassword');
+            const error = document.getElementById('registerPasswordError');
             
-            // Focar no alerta para leitores de tela
-            globalAlert.focus();
-            
-            // Ocultar após 5 segundos
-            setTimeout(() => {
-                globalAlert.setAttribute('aria-hidden', 'true');
-            }, 5000);
+            if (password.value.length > 0 && password.value.length < 8) {
+                error.textContent = 'A palavra-passe deve ter pelo menos 8 caracteres';
+                error.classList.add('show');
+                password.classList.add('error');
+                return false;
+            } else {
+                error.classList.remove('show');
+                password.classList.remove('error');
+                return true;
+            }
         }
 
-        // Submissão do Formulário
-        form.addEventListener('submit', async (e) => {
+        // Validação de Confirmação de Password
+        function validatePasswordConfirm() {
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerPasswordConfirm');
+            const error = document.getElementById('registerPasswordConfirmError');
+            
+            if (confirm.value.length > 0 && password !== confirm.value) {
+                error.textContent = 'As palavras-passe não coincidem';
+                error.classList.add('show');
+                confirm.classList.add('error');
+                return false;
+            } else {
+                error.classList.remove('show');
+                confirm.classList.remove('error');
+                return true;
+            }
+        }
+
+        // Handle Login
+        async function handleLogin(e) {
             e.preventDefault();
-
-            // Validar todos os campos
-            const isEmailValid = validateEmail();
-            const isPasswordValid = validatePassword();
-
-            if (!isEmailValid || !isPasswordValid) {
-                showGlobalAlert('Por favor, corrija os erros no formulário antes de continuar.');
-                // Focar no primeiro campo com erro
-                if (!isEmailValid) {
-                    emailInput.focus();
-                } else if (!isPasswordValid) {
-                    passwordInput.focus();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const emailInput = document.getElementById('loginEmail');
+            const passwordInput = document.getElementById('loginPassword');
+            const emailError = document.getElementById('loginEmailError');
+            const passwordError = document.getElementById('loginPasswordError');
+            
+            // Limpar erros anteriores
+            emailError.classList.remove('show');
+            passwordError.classList.remove('show');
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            
+            // Validação básica
+            if (!email || !password) {
+                if (!email) {
+                    emailError.textContent = 'Email é obrigatório';
+                    emailError.classList.add('show');
+                }
+                if (!password) {
+                    passwordError.textContent = 'Palavra-passe é obrigatória';
+                    passwordError.classList.add('show');
                 }
                 return;
             }
-
-            // Desabilitar botão durante submissão
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'A processar...';
-
-            // Simular submissão (substituir por chamada real à API)
+            
             try {
-                await simulateLogin(emailInput.value.trim(), passwordInput.value);
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
                 
-                showGlobalAlert('Login realizado com sucesso!', 'success');
+                const data = await response.json();
                 
-                // Redirecionar após sucesso (exemplo)
-                setTimeout(() => {
-                    console.log('Redirecionando...');
-                    // window.location.href = '/dashboard';
-                }, 1500);
+                if (!response.ok) {
+                    throw new Error(data.error || 'Erro ao fazer login');
+                }
+                
+                // Guardar utilizador
+                currentUser = data.user;
+                localStorage.setItem('studyflow_user', JSON.stringify(currentUser));
+                
+                // Redirecionar para StudyFlow
+                window.location.href = '/studyflow';
+                
             } catch (error) {
-                showGlobalAlert(error.message || 'Erro ao fazer login. Por favor, tente novamente.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Iniciar Sessão';
+                passwordError.textContent = error.message || 'Erro ao fazer login. Verifique as suas credenciais.';
+                passwordError.classList.add('show');
+                passwordInput.classList.add('error');
             }
-        });
-
-        // Simular Login (substituir por chamada real à API)
-        function simulateLogin(email, password) {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    // Simulação: aceitar qualquer email e senha com 8+ caracteres
-                    if (password.length >= 8) {
-                        resolve({ success: true });
-                    } else {
-                        reject(new Error('Credenciais inválidas'));
-                    }
-                }, 1500);
-            });
         }
 
-        // Link "Esqueceu-se da palavra-passe"
-        document.getElementById('forgot-password').addEventListener('click', (e) => {
+        // Handle Register
+        async function handleRegister(e) {
             e.preventDefault();
-            alert('Funcionalidade de recuperação de palavra-passe em desenvolvimento.');
-        });
-
-        // Navegação por teclado melhorada
-        form.addEventListener('keydown', (e) => {
-            // Enter no último campo submete o formulário
-            if (e.key === 'Enter' && e.target === passwordInput && !submitBtn.disabled) {
-                form.dispatchEvent(new Event('submit'));
-            }
-        });
-
-        // Prevenir submissão dupla
-        let isSubmitting = false;
-        form.addEventListener('submit', () => {
-            if (isSubmitting) {
-                e.preventDefault();
+            
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const emailError = document.getElementById('registerEmailError');
+            const passwordError = document.getElementById('registerPasswordError');
+            const passwordConfirmError = document.getElementById('registerPasswordConfirmError');
+            
+            // Limpar erros anteriores
+            emailError.classList.remove('show');
+            passwordError.classList.remove('show');
+            passwordConfirmError.classList.remove('show');
+            
+            // Validação
+            if (!email || !password || !passwordConfirm) {
+                if (!email) {
+                    emailError.textContent = 'Email é obrigatório';
+                    emailError.classList.add('show');
+                    document.getElementById('registerEmail').classList.add('error');
+                }
+                if (!password) {
+                    passwordError.textContent = 'Palavra-passe é obrigatória';
+                    passwordError.classList.add('show');
+                    document.getElementById('registerPassword').classList.add('error');
+                }
+                if (!passwordConfirm) {
+                    passwordConfirmError.textContent = 'Confirmação de palavra-passe é obrigatória';
+                    passwordConfirmError.classList.add('show');
+                    document.getElementById('registerPasswordConfirm').classList.add('error');
+                }
                 return;
             }
-            isSubmitting = true;
-            setTimeout(() => {
-                isSubmitting = false;
-            }, 2000);
+            
+            if (password.length < 8) {
+                passwordError.textContent = 'A palavra-passe deve ter pelo menos 8 caracteres';
+                passwordError.classList.add('show');
+                document.getElementById('registerPassword').classList.add('error');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                passwordConfirmError.textContent = 'As palavras-passe não coincidem';
+                passwordConfirmError.classList.add('show');
+                document.getElementById('registerPasswordConfirm').classList.add('error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Erro ao criar conta');
+                }
+                
+                // Guardar utilizador
+                currentUser = data.user;
+                localStorage.setItem('studyflow_user', JSON.stringify(currentUser));
+                
+                // Redirecionar para StudyFlow
+                window.location.href = '/studyflow';
+                
+            } catch (error) {
+                if (error.message.includes('já está registado')) {
+                    emailError.textContent = error.message;
+                    emailError.classList.add('show');
+                    document.getElementById('registerEmail').classList.add('error');
+                } else {
+                    passwordError.textContent = error.message || 'Erro ao criar conta. Tente novamente.';
+                    passwordError.classList.add('show');
+                    document.getElementById('registerPassword').classList.add('error');
+                }
+            }
+        }
+
+        // Fechar modal com Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+            }
         });
     </script>
 </body>

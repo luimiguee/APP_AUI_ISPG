@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel de Administração - StudyFlow">
+    <title>Painel de Administração - StudyFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --bg-color: #f9fafb;
+            --white: #ffffff;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-primary);
+            background: var(--bg-color);
+        }
+
+        tr:hover {
+            background: var(--bg-color);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-admin {
+            background: #fef2f2;
+            color: var(--danger-color);
+        }
+
+        .badge-user {
+            background: #f0fdf4;
+            color: var(--success-color);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        select {
+            padding: 0.375rem 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            background: #fef2f2;
+            color: var(--danger-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <div class="header-content">
+            <a href="/studyflow" class="logo">
+                <span class="logo-icon">SF</span>
+                <span>StudyFlow Admin</span>
+            </a>
+            <nav>
+                <button class="btn btn-secondary" onclick="logout()">Sair</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <h1 class="page-title">Painel de Administração</h1>
+
+        <!-- Estatísticas -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Total de Utilizadores</div>
+                <div class="stat-value" id="totalUsers">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Administradores</div>
+                <div class="stat-value" id="totalAdmins">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Novos (7 dias)</div>
+                <div class="stat-value" id="recentUsers">-</div>
+            </div>
+        </div>
+
+        <!-- Lista de Utilizadores -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Gestão de Utilizadores</h2>
+                <button class="btn btn-primary" onclick="loadUsers()">Atualizar</button>
+            </div>
+            <div id="usersTableContainer">
+                <div class="loading">A carregar...</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentUser = null;
+
+        // Verificar autenticação e permissões
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('studyflow_user');
+            if (!savedUser) {
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                currentUser = JSON.parse(savedUser);
+                if (currentUser.role !== 'admin') {
+                    alert('Acesso negado. Apenas administradores podem aceder a esta página.');
+                    window.location.href = '/studyflow';
+                    return;
+                }
+                
+                loadStats();
+                loadUsers();
+            } catch (e) {
+                console.error('Erro:', e);
+                window.location.href = '/';
+            }
+        });
+
+        // Carregar Estatísticas
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/admin/stats', {
+                    headers: {
+                        'user-id': currentUser.id.toString()
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar estatísticas');
+                }
+
+                const data = await response.json();
+                document.getElementById('totalUsers').textContent = data.stats.totalUsers;
+                document.getElementById('totalAdmins').textContent = data.stats.totalAdmins;
+                document.getElementById('recentUsers').textContent = data.stats.recentUsers;
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('statsGrid').innerHTML = 
+                    `<div class="error">Erro ao carregar estatísticas: ${error.message}</div>`;
+            }
+        }
+
+        // Carregar Utilizadores
+        async function loadUsers() {
+            const container = document.getElementById('usersTableContainer');
+            container.innerHTML = '<div class="loading">A carregar...</div>';
+
+            try {
+                const response = await fetch('/api/admin/users', {
+                    headers: {
+                        'user-id': currentUser.id.toString()
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar utilizadores');
+                }
+
+                const data = await response.json();
+                renderUsersTable(data.users);
+            } catch (error) {
+                container.innerHTML = `<div class="error">Erro ao carregar utilizadores: ${error.message}</div>`;
+            }
+        }
+
+        // Renderizar Tabela de Utilizadores
+        function renderUsersTable(users) {
+            const container = document.getElementById('usersTableContainer');
+            
+            if (users.length === 0) {
+                container.innerHTML = '<p>Nenhum utilizador encontrado.</p>';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Data de Registo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            users.forEach(user => {
+                const isCurrentUser = user.id === currentUser.id;
+                const roleBadge = user.role === 'admin' 
+                    ? '<span class="badge badge-admin">Admin</span>' 
+                    : '<span class="badge badge-user">User</span>';
+                
+                const registerDate = new Date(user.created_at).toLocaleDateString('pt-PT');
+
+                html += `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${escapeHtml(user.email)}</td>
+                        <td>${roleBadge}</td>
+                        <td>${registerDate}</td>
+                        <td>
+                            <div class="actions">
+                                <select onchange="updateRole(${user.id}, this.value)" ${isCurrentUser ? 'disabled' : ''}>
+                                    <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                                    <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                </select>
+                                ${!isCurrentUser ? `<button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">Remover</button>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // Atualizar Role
+        async function updateRole(userId, newRole) {
+            if (!confirm(`Tem a certeza que deseja alterar o role deste utilizador para ${newRole}?`)) {
+                loadUsers(); // Recarregar para reverter seleção
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'user-id': currentUser.id.toString()
+                    },
+                    body: JSON.stringify({ role: newRole })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Erro ao atualizar role');
+                }
+
+                alert('Role atualizado com sucesso!');
+                loadUsers();
+                loadStats();
+            } catch (error) {
+                alert(`Erro: ${error.message}`);
+                loadUsers();
+            }
+        }
+
+        // Remover Utilizador
+        async function deleteUser(userId) {
+            if (!confirm('Tem a certeza que deseja remover este utilizador? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'user-id': currentUser.id.toString()
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Erro ao remover utilizador');
+                }
+
+                alert('Utilizador removido com sucesso!');
+                loadUsers();
+                loadStats();
+            } catch (error) {
+                alert(`Erro: ${error.message}`);
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Tem a certeza que deseja terminar sessão?')) {
+                localStorage.removeItem('studyflow_user');
+                window.location.href = '/';
+            }
+        }
+
+        // Utilitário
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="StudyFlow - Organize o seu percurso académico de forma simples e eficiente">
+    <title>StudyFlow - Gestão Académica</title>
+    <style>
+        /* Reset e Variáveis CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --bg-color: #f9fafb;
+            --white: #ffffff;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        /* Preferência de movimento reduzido */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* List Items */
+        .item-list {
+            list-style: none;
+        }
+
+        .item {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .item-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-high {
+            background: #fef2f2;
+            color: var(--danger-color);
+        }
+
+        .badge-medium {
+            background: #fffbeb;
+            color: var(--warning-color);
+        }
+
+        .badge-low {
+            background: #f0fdf4;
+            color: var(--secondary-color);
+        }
+
+        .badge-completed {
+            background: var(--border-color);
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0.25rem;
+        }
+
+        .btn-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Calendar/Week View */
+        .week-view {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .day-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 0.5rem;
+            background: var(--primary-light);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .day-cell {
+            min-height: 80px;
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .day-cell.has-events {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .event-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.25rem;
+        }
+
+        .event-dot.task {
+            background: var(--primary-color);
+        }
+
+        .event-dot.work {
+            background: var(--warning-color);
+        }
+
+        .event-dot.test {
+            background: var(--danger-color);
+        }
+
+        .event-dot.study {
+            background: var(--secondary-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .header-content nav {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+            }
+
+            #userEmail {
+                display: none;
+            }
+
+            .week-view {
+                grid-template-columns: 1fr;
+            }
+
+            .day-header {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .item-actions {
+                flex-wrap: wrap;
+            }
+
+            .item-actions .btn {
+                flex: 1;
+                min-width: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-primary: #f9fafb;
+                --text-secondary: #d1d5db;
+                --bg-color: #111827;
+                --white: #1f2937;
+                --border-color: #374151;
+            }
+        }
+
+        /* High contrast support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+            }
+
+            .item {
+                border-width: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <div class="header-content">
+            <a href="/" class="logo" aria-label="StudyFlow - Página inicial">
+                <span class="logo-icon">SF</span>
+                <span>StudyFlow</span>
+            </a>
+            <nav aria-label="Navegação principal" style="display: flex; gap: 1rem; align-items: center;">
+                <span id="userEmail" style="color: var(--text-secondary); font-size: 0.875rem;"></span>
+                <button class="btn btn-primary" id="addTaskBtn" aria-label="Adicionar nova tarefa">
+                    + Tarefa
+                </button>
+                <a href="/admin" id="adminLink" class="btn btn-sm" style="background: var(--warning-color); color: white; text-decoration: none; display: none;" aria-label="Painel de administração">
+                    Admin
+                </a>
+                <button class="btn btn-sm" id="logoutBtn" aria-label="Terminar sessão" style="background: var(--border-color);">
+                    Sair
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <!-- Estatísticas -->
+            <div class="card">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTasks">0</div>
+                        <div class="stat-label">Tarefas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalWorks">0</div>
+                        <div class="stat-label">Trabalhos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTests">0</div>
+                        <div class="stat-label">Testes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalStudies">0</div>
+                        <div class="stat-label">Estudos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="completedItems">0</div>
+                        <div class="stat-label">Concluídas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="pendingItems">0</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                </div>
+                <!-- Barra de Progresso -->
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="font-weight: 600; color: var(--text-primary);">Progresso Geral</span>
+                        <span style="font-weight: 600; color: var(--primary-color);" id="progressPercentage">0%</span>
+                    </div>
+                    <div style="height: 12px; background: var(--border-color); border-radius: 6px; overflow: hidden;">
+                        <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); width: 0%; transition: width 0.3s ease; border-radius: 6px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarefas -->
+            <section class="card" aria-labelledby="tasks-title">
+                <div class="card-header">
+                    <h2 id="tasks-title" class="card-title">Tarefas</h2>
+                    <button class="btn btn-primary btn-sm" id="addTaskBtn2" aria-label="Adicionar tarefa">
+                        + Adicionar
+                    </button>
+                </div>
+                <ul class="item-list" id="tasksList" role="list" aria-label="Lista de tarefas">
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>Nenhuma tarefa adicionada ainda.</p>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Trabalhos -->
+            <section class="card" aria-labelledby="works-title">
+                <div class="card-header">
+                    <h2 id="works-title" class="card-title">Trabalhos</h2>
+                    <button class="btn btn-secondary btn-sm" id="addWorkBtn" aria-label="Adicionar trabalho">
+                        + Adicionar
+                    </button>
+                </div>
+                <ul class="item-list" id="worksList" role="list" aria-label="Lista de trabalhos">
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📄</div>
+                        <p>Nenhum trabalho adicionado ainda.</p>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Testes -->
+            <section class="card" aria-labelledby="tests-title">
+                <div class="card-header">
+                    <h2 id="tests-title" class="card-title">Testes</h2>
+                    <button class="btn btn-danger btn-sm" id="addTestBtn" aria-label="Adicionar teste">
+                        + Adicionar
+                    </button>
+                </div>
+                <ul class="item-list" id="testsList" role="list" aria-label="Lista de testes">
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>Nenhum teste adicionado ainda.</p>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Estudos -->
+            <section class="card" aria-labelledby="studies-title">
+                <div class="card-header">
+                    <h2 id="studies-title" class="card-title">Estudos</h2>
+                    <button class="btn btn-secondary btn-sm" id="addStudyBtn" aria-label="Adicionar estudo">
+                        + Adicionar
+                    </button>
+                </div>
+                <ul class="item-list" id="studiesList" role="list" aria-label="Lista de estudos">
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <p>Nenhum estudo adicionado ainda.</p>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" role="complementary" aria-label="Horário semanal">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Esta Semana</h2>
+                </div>
+                <div class="week-view" id="weekView" role="grid" aria-label="Vista semanal">
+                    <!-- Dias serão gerados via JavaScript -->
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Modal para Adicionar/Editar Item -->
+    <div class="modal" id="itemModal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle" class="modal-title">Adicionar Item</h2>
+                <button class="btn-close" id="closeModal" aria-label="Fechar modal">&times;</button>
+            </div>
+            <form id="itemForm" aria-label="Formulário de item">
+                <input type="hidden" id="itemId" name="id">
+                <input type="hidden" id="itemType" name="type">
+
+                <div class="form-group">
+                    <label for="itemTitle">Título <span aria-label="obrigatório">*</span></label>
+                    <input type="text" id="itemTitle" name="title" required aria-required="true" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="itemDescription">Descrição</label>
+                    <textarea id="itemDescription" name="description" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="itemSubject">Disciplina</label>
+                    <input type="text" id="itemSubject" name="subject" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="itemDate">Data <span aria-label="obrigatório">*</span></label>
+                    <input type="date" id="itemDate" name="date" required aria-required="true">
+                </div>
+
+                <div class="form-group">
+                    <label for="itemTime">Hora</label>
+                    <input type="time" id="itemTime" name="time">
+                </div>
+
+                <div class="form-group">
+                    <label for="itemPriority">Prioridade</label>
+                    <select id="itemPriority" name="priority">
+                        <option value="low">Baixa</option>
+                        <option value="medium">Média</option>
+                        <option value="high">Alta</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="workFields" style="display: none;">
+                    <label for="itemProgress">Progresso (%)</label>
+                    <input type="number" id="itemProgress" name="progress" min="0" max="100" value="0">
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Guardar</button>
+                    <button type="button" class="btn" id="cancelBtn" style="flex: 1; background: var(--border-color);">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        const state = {
+            tasks: [],
+            works: [],
+            tests: [],
+            studies: [],
+            currentEditId: null,
+            currentEditType: null
+        };
+
+        // Verificar autenticação
+        function checkAuth() {
+            const savedUser = localStorage.getItem('studyflow_user');
+            if (!savedUser) {
+                window.location.href = '/';
+                return null;
+            }
+            try {
+                return JSON.parse(savedUser);
+            } catch (e) {
+                window.location.href = '/';
+                return null;
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = checkAuth();
+            if (user) {
+                // Mostrar email do utilizador
+                const userEmailEl = document.getElementById('userEmail');
+                if (userEmailEl && user.email) {
+                    userEmailEl.textContent = user.email;
+                }
+                
+                // Mostrar link de admin se for administrador
+                if (user.role === 'admin') {
+                    const adminLink = document.getElementById('adminLink');
+                    if (adminLink) {
+                        adminLink.style.display = 'inline-flex';
+                    }
+                }
+                
+                loadData();
+                setupEventListeners();
+                renderWeekView();
+                updateStats();
+            }
+        });
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('Tem a certeza que deseja terminar sessão?')) {
+                    localStorage.removeItem('studyflow_user');
+                    window.location.href = '/';
+                }
+            });
+
+            // Botões de adicionar
+            document.getElementById('addTaskBtn').addEventListener('click', () => openModal('task'));
+            document.getElementById('addTaskBtn2').addEventListener('click', () => openModal('task'));
+            document.getElementById('addWorkBtn').addEventListener('click', () => openModal('work'));
+            document.getElementById('addTestBtn').addEventListener('click', () => openModal('test'));
+            document.getElementById('addStudyBtn').addEventListener('click', () => openModal('study'));
+
+            // Modal
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelBtn').addEventListener('click', closeModal);
+            document.getElementById('itemModal').addEventListener('click', (e) => {
+                if (e.target.id === 'itemModal') closeModal();
+            });
+
+            // Formulário
+            document.getElementById('itemForm').addEventListener('submit', handleFormSubmit);
+
+            // Tipo de item muda campos
+            document.getElementById('itemType').addEventListener('change', (e) => {
+                const workFields = document.getElementById('workFields');
+                workFields.style.display = e.target.value === 'work' ? 'block' : 'none';
+            });
+        }
+
+        // Abrir Modal
+        function openModal(type, id = null) {
+            const modal = document.getElementById('itemModal');
+            const form = document.getElementById('itemForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const itemType = document.getElementById('itemType');
+            const workFields = document.getElementById('workFields');
+
+            // Reset form
+            form.reset();
+            document.getElementById('itemId').value = '';
+            state.currentEditId = null;
+            state.currentEditType = null;
+
+            // Configurar tipo
+            itemType.value = type;
+            workFields.style.display = type === 'work' ? 'block' : 'none';
+
+            // Configurar título
+            const titles = {
+                task: 'Adicionar Tarefa',
+                work: 'Adicionar Trabalho',
+                test: 'Adicionar Teste',
+                study: 'Adicionar Estudo'
+            };
+            modalTitle.textContent = id ? `Editar ${titles[type].replace('Adicionar ', '')}` : titles[type];
+
+            // Se editar, preencher dados
+            if (id) {
+                const item = getItemById(type, id);
+                if (item) {
+                    fillForm(item, type);
+                    state.currentEditId = id;
+                    state.currentEditType = type;
+                }
+            }
+
+            // Data padrão: hoje
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('itemDate').value = today;
+
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.getElementById('itemTitle').focus();
+        }
+
+        // Preencher formulário
+        function fillForm(item, type) {
+            document.getElementById('itemId').value = item.id;
+            document.getElementById('itemType').value = type;
+            document.getElementById('itemTitle').value = item.title;
+            document.getElementById('itemDescription').value = item.description || '';
+            document.getElementById('itemSubject').value = item.subject || '';
+            document.getElementById('itemDate').value = item.date;
+            document.getElementById('itemTime').value = item.time || '';
+            document.getElementById('itemPriority').value = item.priority || 'medium';
+            if (type === 'work') {
+                document.getElementById('itemProgress').value = item.progress || 0;
+            }
+        }
+
+        // Fechar Modal
+        function closeModal() {
+            const modal = document.getElementById('itemModal');
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        // Submeter Formulário
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const type = formData.get('type');
+            const id = formData.get('id');
+
+            const item = {
+                id: id || Date.now().toString(),
+                title: formData.get('title'),
+                description: formData.get('description'),
+                subject: formData.get('subject'),
+                date: formData.get('date'),
+                time: formData.get('time'),
+                priority: formData.get('priority') || 'medium',
+                completed: id ? getItemById(type, id)?.completed || false : false,
+                createdAt: id ? getItemById(type, id)?.createdAt || new Date().toISOString() : new Date().toISOString()
+            };
+
+            if (type === 'work') {
+                item.progress = parseInt(formData.get('progress')) || 0;
+            }
+
+            if (id) {
+                updateItem(type, item);
+            } else {
+                addItem(type, item);
+            }
+
+            closeModal();
+            renderAll();
+            saveData();
+        }
+
+        // Adicionar Item
+        function addItem(type, item) {
+            state[type + 's'].push(item);
+        }
+
+        // Atualizar Item
+        function updateItem(type, item) {
+            const index = state[type + 's'].findIndex(i => i.id === item.id);
+            if (index !== -1) {
+                state[type + 's'][index] = item;
+            }
+        }
+
+        // Obter Item por ID
+        function getItemById(type, id) {
+            return state[type + 's'].find(item => item.id === id);
+        }
+
+        // Remover Item
+        function deleteItem(type, id) {
+            if (confirm('Tem a certeza que deseja remover este item?')) {
+                state[type + 's'] = state[type + 's'].filter(item => item.id !== id);
+                renderAll();
+                saveData();
+            }
+        }
+
+        // Alternar Concluído
+        function toggleCompleted(type, id) {
+            const item = getItemById(type, id);
+            if (item) {
+                item.completed = !item.completed;
+                renderAll();
+                saveData();
+            }
+        }
+
+        // Renderizar Tudo
+        function renderAll() {
+            renderList('task', state.tasks);
+            renderList('work', state.works);
+            renderList('test', state.tests);
+            renderList('study', state.studies);
+            renderWeekView();
+            updateStats();
+        }
+
+        // Renderizar Lista
+        function renderList(type, items) {
+            const listId = type + 'sList';
+            const list = document.getElementById(listId);
+            
+            if (items.length === 0) {
+                const emptyTexts = {
+                    task: '📝 Nenhuma tarefa adicionada ainda.',
+                    work: '📄 Nenhum trabalho adicionado ainda.',
+                    test: '📋 Nenhum teste adicionado ainda.',
+                    study: '📚 Nenhum estudo adicionado ainda.'
+                };
+                list.innerHTML = `<li class="empty-state"><div class="empty-state-icon">${emptyTexts[type].split(' ')[0]}</div><p>${emptyTexts[type]}</p></li>`;
+                return;
+            }
+
+            // Ordenar por data e prioridade
+            const sortedItems = [...items].sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                if (dateA.getTime() !== dateB.getTime()) {
+                    return dateA - dateB;
+                }
+                const priorityOrder = { high: 3, medium: 2, low: 1 };
+                return (priorityOrder[b.priority] || 1) - (priorityOrder[a.priority] || 1);
+            });
+
+            list.innerHTML = sortedItems.map(item => createItemHTML(type, item)).join('');
+        }
+
+        // Criar HTML do Item
+        function createItemHTML(type, item) {
+            const isOverdue = new Date(item.date) < new Date() && !item.completed;
+            const priorityClass = item.priority || 'medium';
+            const badgeClass = item.completed ? 'badge-completed' : `badge-${priorityClass}`;
+            
+            const priorityLabels = {
+                high: 'Alta',
+                medium: 'Média',
+                low: 'Baixa'
+            };
+
+            const typeLabels = {
+                task: 'Tarefa',
+                work: 'Trabalho',
+                test: 'Teste',
+                study: 'Estudo'
+            };
+
+            return `
+                <li class="item ${item.completed ? 'completed' : ''}" data-id="${item.id}">
+                    <div class="item-header">
+                        <div style="flex: 1;">
+                            <div class="item-title" style="${item.completed ? 'text-decoration: line-through; opacity: 0.6;' : ''}">
+                                ${escapeHtml(item.title)}
+                            </div>
+                            <div class="item-meta">
+                                ${item.subject ? `<span>📚 ${escapeHtml(item.subject)}</span>` : ''}
+                                <span>📅 ${formatDate(item.date)}</span>
+                                ${item.time ? `<span>🕐 ${item.time}</span>` : ''}
+                                ${type === 'work' ? `<span>📊 ${item.progress || 0}%</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <span class="badge ${badgeClass}">${priorityLabels[priorityClass]}</span>
+                        </div>
+                    </div>
+                    ${item.description ? `<p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">${escapeHtml(item.description)}</p>` : ''}
+                    <div class="item-actions" style="margin-top: 0.75rem; justify-content: flex-end;">
+                        <button class="btn btn-sm" onclick="toggleCompleted('${type}', '${item.id}')" aria-label="${item.completed ? 'Marcar como não concluído' : 'Marcar como concluído'}">
+                            ${item.completed ? '↩️ Reabrir' : '✅ Concluir'}
+                        </button>
+                        <button class="btn btn-sm" onclick="openModal('${type}', '${item.id}')" aria-label="Editar ${typeLabels[type]}">
+                            ✏️ Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteItem('${type}', '${item.id}')" aria-label="Remover ${typeLabels[type]}">
+                            🗑️ Remover
+                        </button>
+                    </div>
+                </li>
+            `;
+        }
+
+        // Renderizar Vista Semanal
+        function renderWeekView() {
+            const weekView = document.getElementById('weekView');
+            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const today = new Date();
+            const currentDay = today.getDay();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - currentDay);
+
+            let html = '';
+            
+            // Headers
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const isToday = date.toDateString() === today.toDateString();
+                html += `<div class="day-header" ${isToday ? 'style="background: var(--primary-color); color: white;"' : ''}>${days[i]}<br>${date.getDate()}</div>`;
+            }
+
+            // Cells
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                const dayItems = [
+                    ...state.tasks.filter(t => t.date === dateStr && !t.completed),
+                    ...state.works.filter(w => w.date === dateStr && !w.completed),
+                    ...state.tests.filter(t => t.date === dateStr && !t.completed),
+                    ...state.studies.filter(s => s.date === dateStr && !s.completed)
+                ];
+
+                const hasEvents = dayItems.length > 0;
+                html += `<div class="day-cell ${hasEvents ? 'has-events' : ''}">`;
+                
+                if (dayItems.length > 0) {
+                    dayItems.slice(0, 3).forEach(item => {
+                        let type = 'task';
+                        if (state.tasks.find(t => t.id === item.id)) type = 'task';
+                        else if (state.works.find(w => w.id === item.id)) type = 'work';
+                        else if (state.tests.find(t => t.id === item.id)) type = 'test';
+                        else if (state.studies.find(s => s.id === item.id)) type = 'study';
+                        html += `<div style="font-size: 0.75rem; margin-bottom: 0.25rem;">
+                            <span class="event-dot ${type}"></span>
+                            ${escapeHtml(item.title.substring(0, 20))}${item.title.length > 20 ? '...' : ''}
+                        </div>`;
+                    });
+                    if (dayItems.length > 3) {
+                        html += `<div style="font-size: 0.75rem; color: var(--text-secondary);">+${dayItems.length - 3} mais</div>`;
+                    }
+                }
+                
+                html += `</div>`;
+            }
+
+            weekView.innerHTML = html;
+        }
+
+        // Atualizar Estatísticas
+        function updateStats() {
+            // Totais por tipo
+            document.getElementById('totalTasks').textContent = state.tasks.length;
+            document.getElementById('totalWorks').textContent = state.works.length;
+            document.getElementById('totalTests').textContent = state.tests.length;
+            document.getElementById('totalStudies').textContent = state.studies.length;
+            
+            // Calcular concluídas e pendentes
+            const allItems = [
+                ...state.tasks,
+                ...state.works,
+                ...state.tests,
+                ...state.studies
+            ];
+            
+            const completed = allItems.filter(item => item.completed).length;
+            const pending = allItems.filter(item => !item.completed).length;
+            
+            document.getElementById('completedItems').textContent = completed;
+            document.getElementById('pendingItems').textContent = pending;
+            
+            // Calcular e atualizar barra de progresso
+            const total = allItems.length;
+            const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            document.getElementById('progressPercentage').textContent = `${progress}%`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Guardar Dados
+        function saveData() {
+            const user = JSON.parse(localStorage.getItem('studyflow_user'));
+            const userId = user ? user.id : 'default';
+            const data = {
+                tasks: state.tasks,
+                works: state.works,
+                tests: state.tests,
+                studies: state.studies
+            };
+            localStorage.setItem(`studyflow_data_${userId}`, JSON.stringify(data));
+        }
+
+        // Carregar Dados
+        function loadData() {
+            const user = JSON.parse(localStorage.getItem('studyflow_user'));
+            const userId = user ? user.id : 'default';
+            const saved = localStorage.getItem(`studyflow_data_${userId}`);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    state.tasks = data.tasks || [];
+                    state.works = data.works || [];
+                    state.tests = data.tests || [];
+                    state.studies = data.studies || [];
+                } catch (e) {
+                    console.error('Erro ao carregar dados:', e);
+                }
+            }
+            renderAll();
+        }
+
+        // Utilitários
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Expor funções globalmente para uso nos event handlers inline
+        window.openModal = openModal;
+        window.deleteItem = deleteItem;
+        window.toggleCompleted = toggleCompleted;
+    </script>
+</body>
+</html>
+
